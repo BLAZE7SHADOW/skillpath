@@ -1,48 +1,51 @@
 # Note
 
-> **Draft — rewrite this in your own words before submitting.** It is scored on
-> how you think and how honest you are, and it has to be true of *your* build.
-> Cut anything you wouldn't say out loud on the call.
+**What I'd fix with two more days**
 
-**What I'd fix with two more days.** Cache the catalogue so a Framer remount
-doesn't refetch. Swap fixed backoff for exponential with jitter — 400/900ms is
-fine for one client, not for many. Write tests for the reducer, not just the
-price assertions.
+The page asks the server for the courses every time it loads. It should remember
+them for a while. I'd also write proper tests, not just the one price check I have.
 
-**Where I got stuck.** Responsiveness. My first version read `window.innerWidth`
-into state; on the Framer canvas it reported the wrong width and rendered three
-columns at phone size. Media queries in an injected stylesheet fixed it.
+**Where I got stuck**
 
-The harder one was what to show when `/country-code` fails but the catalogue
-loads. I infer the currency from the device time zone, say in the UI that I
-guessed, and offer a ₹/$ switch. A disclosed guess beats a hidden one, and an IP
-lookup would have meant a third request that can also fail.
+The layout. My first version measured the screen width in code to decide how many
+columns to show. Inside Framer it kept reading the wrong width and put three columns
+on a phone. I deleted it and let CSS decide instead — simpler, and correct.
 
-**What I'm not happy with.** Each section injects its own `<style>`, so tokens are
-duplicated when several are on a page — self-contained, which Framer needs, but
-not clean. Skeleton count is fixed at six while the real count is 5–10, so there's
-a small reflow. Search ignores descriptions.
+The harder one wasn't code. There are two API calls and either can fail. If the one
+that tells me your country fails but the courses load fine, what price do I show? I
+guess from your device's time zone, say on the page that I guessed, and give you a
+button to switch. A guess you admit to is fine. A guess you hide isn't.
 
-*(198 words)*
+**What I'm not happy with**
+
+Each section loads its own copy of the styling. It works, but it repeats itself. The
+loading placeholder always shows six cards when the real number is five to ten, so
+the page shifts a little when they arrive. And search only looks at course names and
+categories, not descriptions.
 
 ---
 
-## AI use — fill this in yourself
+## What AI I used
 
-Required, and they will check it against the chat link. Be specific about which
-parts you took, which you rewrote, and which you rejected. Something like:
+**Claude Code (the command-line tool).** The full session log is in this repo:
+[`AI-TRANSCRIPT.md`](./AI-TRANSCRIPT.md) — every message, unedited.
 
-> I used Claude throughout. It probed the API first, which turned up things the
-> brief doesn't say: failures come back as 404/500 with a JSON body, so `fetch`
-> doesn't throw and `res.ok` has to be checked explicitly; and a GET with custom
-> headers would trigger a preflight OPTIONS that the API answers with 405. It
-> drafted the client and the reducer. I pushed back on two suggestions — a
-> middleware pipeline for two GET endpoints, which was abstraction I didn't need,
-> and using an IP geolocation service as the currency fallback, which would have
-> added a third request that can fail as the recovery path for one that already
-> did. The decisions on retry count, the currency fallback, and the two property
-> controls were mine.
+Claude Code stores sessions on your own machine and has no public share link; that
+feature belongs to the claude.ai website. Rather than send a summary, which you
+asked us not to do, I've committed the whole conversation.
 
-**Only write what's actually true.** On the call they will point at a random line
-and ask why it's written that way, and "the AI wrote that" ends the interview.
-Read `README.md` — every non-obvious decision has its reasoning next to it.
+It checked the API before writing any code, which turned up two things the brief
+doesn't mention. Failed requests come back looking like normal successful ones, so
+you have to check the status yourself or you end up showing the error text as if it
+were a course. And adding a header to the request would make the browser send an
+extra check first, which this API rejects — so the request has to stay bare.
+
+I turned down two of its suggestions. It wanted a layer of plumbing between the app
+and the two API calls, which was more structure than two calls need. And it wanted
+to look up my location from my IP address as the backup when the country call fails
+— that means making a third request that can also fail, to recover from one that
+already did. I used the device's time zone instead, which needs no internet at all.
+
+The transcript also shows the parts that went badly, including Framer refusing my
+files until I fixed how the imports were written. I found that by hitting the error,
+not by knowing it.
