@@ -27,25 +27,48 @@ not descriptions.
 
 ## What AI I used
 
-**Claude Code (the command-line tool).** The full session log is in this repo:
-[`AI-TRANSCRIPT.md`](./AI-TRANSCRIPT.md) — every message, unedited.
+**Claude Code — Anthropic's command-line tool.**
+
+Full unedited session log: [`AI-TRANSCRIPT.md`](./AI-TRANSCRIPT.md)
 
 Claude Code stores sessions on your own machine and has no public share link; that
-feature belongs to the claude.ai website. Rather than send a summary, which you
-asked us not to do, I've committed the whole conversation.
+feature belongs to the claude.ai website. Rather than send a summary, which you asked
+us not to do, the entire conversation is committed to the repo.
 
-It checked the API before writing any code, which turned up two things the brief
-doesn't mention. Failed requests come back looking like normal successful ones, so
-you have to check the status yourself or you end up showing the error text as if it
-were a course. And adding a header to the request would make the browser send an
-extra check first, which this API rejects — so the request has to stay bare.
+**What it did.** Claude wrote the code. It also wrote the price checks and did the
+verification — calling the live API repeatedly to catch real failures, testing all four
+states against a local mock server, and checking the layout at each screen size.
 
-I turned down two of its suggestions. It wanted a layer of plumbing between the app
-and the two API calls, which was more structure than two calls need. And it wanted
-to look up my location from my IP address as the backup when the country call fails
-— that means making a third request that can also fail, to recover from one that
-already did. I used the device's time zone instead, which needs no internet at all.
+**What I did.** I set the direction and made the calls it couldn't make for me.
 
-The transcript also shows the parts that went badly, including Framer refusing my
-files until I fixed how the imports were written. I found that by hitting the error,
-not by knowing it.
+- **Checked the API first.** Before any code, I had it call both endpoints over and
+  over to see how they really behave. That found two things the brief doesn't mention.
+  A failed request comes back looking like a normal one, so you have to check the
+  status yourself or you'll show the error text as if it were a course. And putting a
+  header on the request makes the browser send an extra check first, which this API
+  rejects — so the request has to stay bare.
+
+- **The currency fallback.** It gave me three options for when the country call fails.
+  I chose guessing from the device's time zone, saying on the page that it's a guess,
+  and giving the user a switch. I rejected its other idea — looking up my location from
+  my IP address — because that's a third request that can also fail, to recover from
+  one that already did.
+
+- **The two property controls.** I picked the section heading and the accent colour,
+  the things a designer actually wants to change, over the developer-facing options.
+
+- **The extra field on the card.** I picked the category, because that's the first
+  thing someone scanning a list of courses wants to know.
+
+- **The look.** I asked for the page to be built in wariCrew's visual language rather
+  than something generic.
+
+- **What not to build.** It suggested adding a layer of plumbing between the app and
+  the two API calls. I turned it down — that's more structure than two calls need.
+
+- **What to ship.** I questioned whether the test tooling belonged in a public repo at
+  all. I kept it once I was satisfied it shows how the error states were tested, rather
+  than being clutter.
+
+**What went wrong.** Framer refused the files until the imports were rewritten with file
+extensions. We found that by hitting the error, not by knowing it. That's in the log too.
