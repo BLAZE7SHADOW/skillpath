@@ -12,6 +12,15 @@ and 404 are the page around it.
 > empty or error state when it fetched nothing. See `src/skillpath.ts`, which is the
 > only place course data enters the app.
 
+## AI use
+
+Built with Claude Code. The complete session log is in
+[`AI-TRANSCRIPT.md`](./AI-TRANSCRIPT.md) — every message, unedited.
+
+Claude Code sessions are local and have no public share URL (that is a claude.ai web
+feature), so the log is committed here rather than linked. `NOTES.md` summarises what
+was taken from the AI, what was rewritten, and what was rejected.
+
 ## Run it
 
 ```bash
