@@ -3,25 +3,25 @@
 **What I'd fix with two more days**
 
 The page asks the server for the courses every time it loads. It should remember
-them for a while. I'd also write proper tests, not just the one price check I have.
+them. I'd also write proper tests, not just the one price check.
 
 **Where I got stuck**
 
 The layout. My first version measured the screen width in code to decide how many
 columns to show. Inside Framer it kept reading the wrong width and put three columns
-on a phone. I deleted it and let CSS decide instead — simpler, and correct.
+on a phone. I deleted it and let CSS decide — simpler, and correct.
 
 The harder one wasn't code. There are two API calls and either can fail. If the one
-that tells me your country fails but the courses load fine, what price do I show? I
+that tells me your country fails but the courses load, what price do I show? I
 guess from your device's time zone, say on the page that I guessed, and give you a
 button to switch. A guess you admit to is fine. A guess you hide isn't.
 
 **What I'm not happy with**
 
-Each section loads its own copy of the styling. It works, but it repeats itself. The
+Each section loads its own copy of the styling. It works, but repeats itself. The
 loading placeholder always shows six cards when the real number is five to ten, so
-the page shifts a little when they arrive. And search only looks at course names and
-categories, not descriptions.
+the page shifts when they arrive. And search only looks at names and categories,
+not descriptions.
 
 ---
 
